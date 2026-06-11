@@ -10,5 +10,5 @@ public record CreateApartmentCommand(
     int floor, 
     ApartmentType type, 
     FacingDirection direction, 
-    decimal price) : IRequest<Guid>;
+    decimal price) : IRequest<int>;
 

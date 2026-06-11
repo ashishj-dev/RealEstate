@@ -1,20 +1,31 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using MediatR;
+using RealEstate.Domain;
 
 namespace RealEstate.Application;
 
-public class CreateApartmentCommandHandler : IRequestHandler<CreateApartmentCommand, Guid>
+public class CreateApartmentCommandHandler : IRequestHandler<CreateApartmentCommand, int>
 {
-    public Task<Guid> Handle(CreateApartmentCommand request, CancellationToken cancellationToken)
+    private  readonly IApartmentRepository _apartmentRepository;
+
+    public CreateApartmentCommandHandler(IApartmentRepository apartmentRepository)
     {
-        // 1. In a future step, this is where we will call your constructor:
-        // var apartment = new ApartmentEntity(request.UnitNumber, request.Floor, request.Type, request.Direction, request.Price);
-        // (This will automatically run your domain validation logic/exceptions!)
+        _apartmentRepository = apartmentRepository;
+    }
+    public async Task<int> Handle(CreateApartmentCommand request, CancellationToken cancellationToken)
+    {
+        var apartment = new ApartmentEntity(
+            request.unitNumber,
+            request.floor,
+            request.type,
+            request.direction,
+            request.price
+        );
+        
+        await _apartmentRepository.AddAsync(apartment, cancellationToken);
+        await _apartmentRepository.SaveChangesAsync(cancellationToken);
 
-        // 2. Temporarily generate a fake ID to simulate a successful database save
-        Guid fakeSavedId = Guid.NewGuid();
-
-        // 3. Return the ID wrapped in a completed Task
-        return Task.FromResult(fakeSavedId);
+        return apartment.Id;
     }
 }

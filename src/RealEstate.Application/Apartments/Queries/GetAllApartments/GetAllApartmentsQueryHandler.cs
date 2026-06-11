@@ -6,11 +6,15 @@ namespace RealEstate.Application;
 
 public class GetAllApartmentsQueryHandler : IRequestHandler<GetAllApartmentsQuery, IReadOnlyList<ApartmentEntity>>
 {
-    public Task<IReadOnlyList<ApartmentEntity>> Handle(GetAllApartmentsQuery request, CancellationToken cancellationToken)
-    {
-        //temp return empty list wrapped in a completed task. will change when db is added
-        IReadOnlyList<ApartmentEntity> emptyList = new List<ApartmentEntity>();
+    private readonly IApartmentRepository _apartmentRepository;
 
-        return Task.FromResult(emptyList);
+    public GetAllApartmentsQueryHandler(IApartmentRepository apartmentRepository)
+    {
+        _apartmentRepository = apartmentRepository;
+    }
+
+    public async Task<IReadOnlyList<ApartmentEntity>> Handle(GetAllApartmentsQuery request, CancellationToken cancellationToken)
+    {
+       return await _apartmentRepository.GetAllAsync(cancellationToken);
     }
 }
