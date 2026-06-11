@@ -1,6 +1,6 @@
 namespace RealEstate.Domain;
 
-public enum UnitType
+public enum ApartmentType
 {
     OneBhk,
     TwoBhk,
