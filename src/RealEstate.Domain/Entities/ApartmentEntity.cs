@@ -46,9 +46,9 @@ public class ApartmentEntity : BaseEntity
         }
     }
 
-    public void MarkAsSold()
+    public void UpdateSaleStatus(bool status)
     {
-        IsSold = true;
+        IsSold = status;
     }
 
 

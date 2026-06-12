@@ -87,4 +87,16 @@ public class ApartmentRepository : IApartmentRepository
 
     }
 
+    public async Task<ApartmentEntity?> UpdateSaleStatus(int id, bool status, CancellationToken cancellationToken)
+    {
+        var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id);
+
+        if(apartment is not null)
+        {
+            apartment.UpdateSaleStatus(status);
+            return apartment;
+        }
+        
+        return apartment;
+    }
 }

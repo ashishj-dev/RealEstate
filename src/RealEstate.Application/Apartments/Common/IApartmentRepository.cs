@@ -18,5 +18,6 @@ public interface IApartmentRepository
     Task DeleteByIdAsync(int id, CancellationToken cancellationToken);
     
     Task <ApartmentEntity?> UpdatePrice(int id, decimal price, CancellationToken cancellationToken);
+    Task <ApartmentEntity?> UpdateSaleStatus(int id, bool status, CancellationToken cancellationToken);
 
 }
