@@ -34,6 +34,20 @@ namespace RealEstate.WebApi
             return Ok(apartments);
         }
 
+        [HttpGet("getbyid/{id}")]
+        public async Task<ActionResult<ApartmentEntity>> GetApartmentById (int id, CancellationToken cancellationToken)
+        {
+            var apartment = await _mediator.Send(new GetApartmentByIdQuery(id), cancellationToken);
+
+            if(apartment is null)
+            {
+                return NotFound(new{message = $"Apartment with Id: {id} does not exist"});
+            }
+
+            return Ok(apartment);
+
+        }
+
         
     }
 }

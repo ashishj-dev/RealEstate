@@ -13,7 +13,10 @@ builder.Services.AddDbContext<RealEstateDbContext>(options => options.UseSqlite(
 builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApartmentRepository).Assembly));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
 
 
 var app = builder.Build();
