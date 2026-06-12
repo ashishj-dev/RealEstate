@@ -13,4 +13,7 @@ public interface IApartmentRepository
 
     Task SaveChangesAsync(CancellationToken cancellationToken);
 
+    Task<List<ApartmentEntity>> GetFilteredAsync(ApartmentType? type, int? floor, FacingDirection? direction, CancellationToken cancellationToken);
+
+
 }

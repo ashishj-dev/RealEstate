@@ -31,6 +31,28 @@ public class ApartmentRepository : IApartmentRepository
         return await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 
+    public Task<List<ApartmentEntity>> GetFilteredAsync(ApartmentType? type, int? floor, FacingDirection? direction, CancellationToken cancellationToken)
+    {
+        var query = _context.Apartments.AsQueryable();
+
+        if(type.HasValue)
+        {
+            query = query.Where(a => a.Type == type.Value);
+        }
+
+        if(direction.HasValue)
+        {
+            query = query.Where(a => a.Direction == direction.Value);
+        }
+
+        if(floor.HasValue)
+        {
+            query = query.Where(a => a.Floor == floor.Value);
+        }
+
+        return query.ToListAsync(cancellationToken);
+    }
+
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
         await _context.SaveChangesAsync(cancellationToken);

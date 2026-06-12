@@ -48,6 +48,19 @@ namespace RealEstate.WebApi
 
         }
 
+
+        [HttpGet("getbyfilter")]
+        public async Task<ActionResult<List<ApartmentEntity>>> GetApartmentByFilter([FromQuery] int? floor,[FromQuery] ApartmentType? type, [FromQuery] FacingDirection? direction, CancellationToken cancellationToken)
+        {
+            var apartments = await _mediator.Send(new GetApartmentByFilterQuery(floor,type,direction), cancellationToken);
+
+            if(apartments.Count < 1)
+            {
+                return NotFound(new{message = $"Apartment with current filters do not exist"});
+            }
+
+            return Ok(apartments);
+        }
         
     }
 }
