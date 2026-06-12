@@ -15,6 +15,7 @@ public class DeleteApartmentByIdCommandHandler : IRequestHandler<DeleteApartment
     public async Task<int> Handle(DeleteApartmentByIdCommand request, CancellationToken cancellationToken)
     {
         await _apartmentRepository.DeleteByIdAsync(request.id, cancellationToken);
+        await _apartmentRepository.SaveChangesAsync(cancellationToken);
         return request.id;
     }
 }

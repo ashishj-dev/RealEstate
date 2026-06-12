@@ -68,6 +68,13 @@ namespace RealEstate.WebApi
             await _mediator.Send(new DeleteApartmentByIdCommand(id), cancellationToken);
             return id;
         }
+
+        [HttpPut("updateprice/{id}")]
+        public async Task<ActionResult<ApartmentEntity?>> UpdateApartmentPrice(int id,[FromQuery] decimal price, CancellationToken cancellationToken)
+        {
+            var apartment = await _mediator.Send(new UpdateApartmentPriceCommand(id,price));
+            return apartment;
+        }
         
     }
 }

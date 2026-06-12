@@ -16,5 +16,7 @@ public interface IApartmentRepository
     Task<List<ApartmentEntity>> GetFilteredAsync(ApartmentType? type, int? floor, FacingDirection? direction, CancellationToken cancellationToken);
 
     Task DeleteByIdAsync(int id, CancellationToken cancellationToken);
+    
+    Task <ApartmentEntity?> UpdatePrice(int id, decimal price, CancellationToken cancellationToken);
 
 }
