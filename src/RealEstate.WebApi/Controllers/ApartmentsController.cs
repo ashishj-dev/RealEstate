@@ -61,6 +61,13 @@ namespace RealEstate.WebApi
 
             return Ok(apartments);
         }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult<int>> DeleteApartmentById(int id, CancellationToken cancellationToken)
+        {
+            await _mediator.Send(new DeleteApartmentByIdCommand(id), cancellationToken);
+            return id;
+        }
         
     }
 }

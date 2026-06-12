@@ -14,11 +14,21 @@ public class ApartmentRepository : IApartmentRepository
         _context = context;
     }
 
-
+    
 
     public async Task AddAsync(ApartmentEntity apartment, CancellationToken cancellationToken)
     {
         await _context.Apartments.AddAsync(apartment, cancellationToken);
+    }
+
+    public async Task DeleteByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id);
+
+        if(apartment is not null)
+            _context.Apartments.Remove(apartment);
+        else
+            throw new InvalidDataException();
     }
 
     public async Task<IReadOnlyList<ApartmentEntity>> GetAllAsync(CancellationToken cancellationToken)
