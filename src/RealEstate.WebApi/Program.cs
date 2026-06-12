@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Application;
 using RealEstate.Infrastructure;
+using RealEstate.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,15 +19,17 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
 });
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 
 var app = builder.Build();
 
 
-//app.UseHttpsRedirection();
+app.UseExceptionHandler();
 
 app.MapControllers();
 app.UseAuthorization();
-
 
 
 app.Run();

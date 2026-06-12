@@ -22,7 +22,7 @@ public class ApartmentEntity : BaseEntity
         Floor = floor;
         Type = type;
         Direction = direction;
-        if(price > 100000 || price < 1000000)
+        if(price > 100000 && price < 1000000)
         {
             Price = price;
         }
