@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace RealEstate.Domain;
 
@@ -32,6 +33,11 @@ public class ApartmentEntity : BaseEntity
         }
         
         IsSold = false;
+
+        if(string.IsNullOrEmpty(UnitNumber) || Floor < 0 ||  Floor > 10)
+        {
+            throw new InvalidFieldsException();
+        }
     }
 
     public void UpdatePrice(decimal price)

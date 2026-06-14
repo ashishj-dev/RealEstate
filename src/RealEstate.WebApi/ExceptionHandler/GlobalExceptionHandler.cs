@@ -20,6 +20,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         {
             
             InvalidPriceException => (StatusCodes.Status400BadRequest, "Domain Validation Error"),
+            InvalidFieldsException => (StatusCodes.Status400BadRequest, "Domain Field Validation Error"),
 
             _ => (StatusCodes.Status500InternalServerError, "Server Error")
         };
