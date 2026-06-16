@@ -14,5 +14,6 @@ public class GetApartmentByIdQueryHandler : IRequestHandler<GetApartmentByIdQuer
     public async Task<ApartmentEntity?> Handle(GetApartmentByIdQuery request, CancellationToken cancellationToken)
     {
         return await _apartmentRepository.GetByIdAsync(request.id, cancellationToken);
+        
     }
 }
