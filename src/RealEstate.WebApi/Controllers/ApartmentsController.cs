@@ -28,16 +28,18 @@ namespace RealEstate.WebApi
             return Ok(apartmentId);
         }
 
+
         [HttpGet("getall")]
-        public async Task<ActionResult<IReadOnlyList<ApartmentDTO>>> GetAllApartments(CancellationToken cancellationToken)
+        public async Task<ActionResult<IReadOnlyList<ApartmentDTO>>> GetAllApartments([FromQuery] int pSize, [FromQuery] int pNumber, CancellationToken cancellationToken)
         {
-            var apartments = await _mediator.Send(new GetAllApartmentsQuery(), cancellationToken);
+            var apartments = await _mediator.Send(new GetAllApartmentsQuery(pNumber,pSize), cancellationToken);
 
             return Ok(apartments);
         }
 
+
         [HttpGet("getbyid/{id}")]
-        public async Task<ActionResult<ApartmentEntity>> GetApartmentById (int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApartmentDTO>> GetApartmentById (int id, CancellationToken cancellationToken)
         {
             var apartment = await _mediator.Send(new GetApartmentByIdQuery(id), cancellationToken);
 
@@ -52,9 +54,9 @@ namespace RealEstate.WebApi
 
 
         [HttpGet("getbyfilter")]
-        public async Task<ActionResult<List<ApartmentEntity>>> GetApartmentByFilter([FromQuery] int? floor,[FromQuery] ApartmentType? type, [FromQuery] FacingDirection? direction, CancellationToken cancellationToken)
+        public async Task<ActionResult<List<ApartmentDTO>>> GetApartmentByFilter([FromQuery] int pSize, [FromQuery] int pNumber,  [FromQuery] int? floor,[FromQuery] ApartmentType? type, [FromQuery] FacingDirection? direction, CancellationToken cancellationToken)
         {
-            var apartments = await _mediator.Send(new GetApartmentByFilterQuery(floor,type,direction), cancellationToken);
+            var apartments = await _mediator.Send(new GetApartmentByFilterQuery(pSize, pNumber, floor, type, direction), cancellationToken);
 
             if(apartments.Count < 1)
             {
@@ -64,25 +66,28 @@ namespace RealEstate.WebApi
             return Ok(apartments);
         }
 
+
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult<int>> DeleteApartmentById(int id, CancellationToken cancellationToken)
         {
-            await _mediator.Send(new DeleteApartmentByIdCommand(id), cancellationToken);
-            return id;
+            var result = await _mediator.Send(new DeleteApartmentByIdCommand(id), cancellationToken);
+            return result;
         }
+
 
         [HttpPut("updateprice/{id}")]
-        public async Task<ActionResult<ApartmentDTO?>> UpdateApartmentPrice(int id,[FromQuery] decimal price, CancellationToken cancellationToken)
+        public async Task<ActionResult<int?>> UpdateApartmentPrice(int id,[FromQuery] decimal price, CancellationToken cancellationToken)
         {
-            var apartment = await _mediator.Send(new UpdateApartmentPriceCommand(id,price), cancellationToken);
-            return apartment;
+            var apartmentId = await _mediator.Send(new UpdateApartmentPriceCommand(id,price), cancellationToken);
+            return apartmentId;
         }
 
+
         [HttpPut("updatesalestatus/{id}")]
-        public async Task<ActionResult<ApartmentDTO?>> UpdateApartmentSaleStatus(int id,[FromQuery] bool status, CancellationToken cancellationToken)
+        public async Task<ActionResult<int?>> UpdateApartmentSaleStatus(int id,[FromQuery] bool status, CancellationToken cancellationToken)
         {
-            var apartment = await _mediator.Send(new UpdateApartmentSaleStatusCommand(id, status), cancellationToken);
-            return apartment;
+            var apartmentId = await _mediator.Send(new UpdateApartmentSaleStatusCommand(id, status), cancellationToken);
+            return apartmentId;
         }
         
     }

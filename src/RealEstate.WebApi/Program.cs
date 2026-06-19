@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<RealEstateDbContext>(options => options.UseSqlite("DataSource = ../RealEstate.Infrastructure/RealEstate.db"));
+builder.Services.AddScoped<IRealEstateDbContext>(provider => provider.GetRequiredService<RealEstateDbContext>());
 
 builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApartmentRepository).Assembly));

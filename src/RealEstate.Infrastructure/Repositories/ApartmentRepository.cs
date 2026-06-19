@@ -8,6 +8,7 @@ namespace RealEstate.Infrastructure;
 
 public class ApartmentRepository : IApartmentRepository
 {
+    //Repository for all write tasks
     private readonly RealEstateDbContext _context;
     public ApartmentRepository(RealEstateDbContext context)
     {
@@ -32,74 +33,14 @@ public class ApartmentRepository : IApartmentRepository
             throw new InvalidDataException();
     }
 
-    //Get All Apartments 
-    public async Task<IReadOnlyList<ApartmentDTO>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return await _context.Apartments.AsNoTracking()
-        .Select(a => new ApartmentDTO
-        {
-            UnitNumber = a.UnitNumber,
-            Floor = a.Floor,
-            Type = a.Type,
-            Direction = a.Direction,
-            IsSold = a.IsSold
-        })
-        .ToListAsync(cancellationToken);
-    }
-
-    // Get Apartment by Id
-    public async Task<ApartmentDTO?> GetByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        //return await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
-        return await _context.Apartments.Where(a => a.Id == id)
-        .Select(p => new ApartmentDTO
-        {
-            UnitNumber = p.UnitNumber,
-            Floor = p.Floor,
-            Type = p.Type,
-            Direction = p.Direction,
-            IsSold = p.IsSold
-        }).FirstOrDefaultAsync(cancellationToken);
-    }
-
-    //Get Apartment by Filter
-    public Task<List<ApartmentDTO>> GetFilteredAsync(ApartmentType? type, int? floor, FacingDirection? direction, CancellationToken cancellationToken)
-    {
-        var query = _context.Apartments.AsQueryable();
-
-        if(type.HasValue)
-        {
-            query = query.Where(a => a.Type == type.Value);
-        }
-
-        if(direction.HasValue)
-        {
-            query = query.Where(a => a.Direction == direction.Value);
-        }
-
-        if(floor.HasValue)
-        {
-            query = query.Where(a => a.Floor == floor.Value);
-        }
-
-        return query.Select(a => new ApartmentDTO
-        {
-            UnitNumber = a.UnitNumber,
-            Floor = a.Floor,
-            Type = a.Type,
-            Direction = a.Direction,
-            IsSold = a.IsSold
-        })
-        .ToListAsync(cancellationToken);
-    }
-
+    
     // Save changes to database
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<ApartmentDTO?> UpdatePrice(int id, decimal price, CancellationToken cancellationToken)
+    public async Task<int?> UpdatePrice(int id, decimal price, CancellationToken cancellationToken)
     {
         var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id);
         
@@ -118,14 +59,14 @@ public class ApartmentRepository : IApartmentRepository
                 IsSold = apartment.IsSold
             };
             
-            return apartmentDto;
+            return apartment.Id;
         }
         
         return null;
 
     }
 
-    public async Task<ApartmentDTO?> UpdateSaleStatus(int id, bool status, CancellationToken cancellationToken)
+    public async Task<int?> UpdateSaleStatus(int id, bool status, CancellationToken cancellationToken)
     {
         var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id);
 
@@ -143,7 +84,7 @@ public class ApartmentRepository : IApartmentRepository
                 IsSold = apartment.IsSold
             };
             
-            return apartmentDto;
+            return apartment.Id;
         }
         
         return null;

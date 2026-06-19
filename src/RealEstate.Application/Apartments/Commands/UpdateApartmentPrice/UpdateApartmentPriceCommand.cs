@@ -4,6 +4,6 @@ using RealEstate.Domain;
 
 namespace RealEstate.Application;
 
-public record UpdateApartmentPriceCommand(int id, decimal price) : IRequest<ApartmentDTO?>;
+public record UpdateApartmentPriceCommand(int id, decimal price) : IRequest<int?>;
 
 

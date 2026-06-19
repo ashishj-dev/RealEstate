@@ -4,5 +4,5 @@ using RealEstate.Domain;
 
 namespace RealEstate.Application;
 
-public record UpdateApartmentSaleStatusCommand(int id, bool status) : IRequest<ApartmentDTO?>;
+public record UpdateApartmentSaleStatusCommand(int id, bool status) : IRequest<int?>;
 

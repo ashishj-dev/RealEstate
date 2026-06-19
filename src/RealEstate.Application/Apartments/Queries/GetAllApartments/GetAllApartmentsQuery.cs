@@ -4,5 +4,5 @@ using RealEstate.Domain;
 
 namespace RealEstate.Application;
 
-public record GetAllApartmentsQuery : IRequest<IReadOnlyList<ApartmentDTO>>;
+public record GetAllApartmentsQuery(int pageNumber = 1, int pageSize = 20) : IRequest<IReadOnlyList<ApartmentDTO>>;
 

@@ -4,5 +4,5 @@ using RealEstate.Domain;
 
 namespace RealEstate.Application;
 
-public record GetApartmentByFilterQuery(int? floor, ApartmentType? Type, FacingDirection? Direction) : IRequest<List<ApartmentDTO>>;
+public record GetApartmentByFilterQuery(int pageSize, int pageNumber, int? floor, ApartmentType? Type, FacingDirection? Direction) : IRequest<List<ApartmentDTO>>;
 
