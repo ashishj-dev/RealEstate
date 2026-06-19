@@ -15,9 +15,19 @@ public class UpdateApartmentSaleStatusCommandHandler : IRequestHandler<UpdateApa
 
     public async Task<int?> Handle(UpdateApartmentSaleStatusCommand request, CancellationToken cancellationToken)
     {
-        var apartmentId = await _apartmentRepository.UpdateSaleStatus(request.id, request.status, cancellationToken);
-        await _apartmentRepository.SaveChangesAsync(cancellationToken);
+        var apartment = await _apartmentRepository.GetById(request.id, cancellationToken);
 
-        return apartmentId;
+        if(apartment is null)
+        {
+            throw new ItemNotFoundException(request.id);
+        }
+        else
+        {
+            var apartmentId = await _apartmentRepository.UpdateSaleStatus(request.id, request.status, cancellationToken);
+            await _apartmentRepository.SaveChangesAsync(cancellationToken);
+
+            return apartmentId;
+        }
+        
     }
 }

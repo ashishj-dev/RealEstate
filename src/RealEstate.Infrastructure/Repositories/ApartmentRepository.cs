@@ -30,10 +30,17 @@ public class ApartmentRepository : IApartmentRepository
         if(apartment is not null)
             _context.Apartments.Remove(apartment);
         else
-            throw new InvalidDataException();
+            throw new InvalidDataException("No apartment exists");
     }
 
-    
+    public async Task<ApartmentEntity?> GetById(int id, CancellationToken cancellationToken)
+    {
+        var result = await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id);
+
+        return result;
+    }
+
+
     // Save changes to database
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {

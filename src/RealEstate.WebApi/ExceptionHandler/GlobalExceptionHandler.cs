@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using RealEstate.Application;
 using RealEstate.Domain;
 
 namespace RealEstate.WebApi;
@@ -21,6 +22,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             
             InvalidPriceException => (StatusCodes.Status400BadRequest, "Domain Validation Error"),
             InvalidFieldsException => (StatusCodes.Status400BadRequest, "Domain Field Validation Error"),
+            ItemNotFoundException => (StatusCodes.Status404NotFound, "Item Not Found Error"),
 
             _ => (StatusCodes.Status500InternalServerError, "Server Error")
         };

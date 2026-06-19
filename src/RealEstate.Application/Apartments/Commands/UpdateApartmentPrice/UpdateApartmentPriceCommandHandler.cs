@@ -14,11 +14,21 @@ public class UpdateApartmentPriceCommandHandler : IRequestHandler<UpdateApartmen
     }
 
     public async Task<int?> Handle(UpdateApartmentPriceCommand request, CancellationToken cancellationToken)
-    {
-        var apartmentId = await _apartmentRepository.UpdatePrice(request.id, request.price, cancellationToken);
-        await _apartmentRepository.SaveChangesAsync(cancellationToken);
+    {   
+        var apartment = await _apartmentRepository.GetById(request.id, cancellationToken);
+
+        if(apartment is null)
+        {
+            throw new ItemNotFoundException(request.id);
+        }
+        else
+        {
+            var apartmentId = await _apartmentRepository.UpdatePrice(request.id, request.price, cancellationToken);
+            await _apartmentRepository.SaveChangesAsync(cancellationToken);
+
+            return apartmentId;
+        }
+
         
-        //check for null and throw exception
-        return apartmentId;
     }
 }

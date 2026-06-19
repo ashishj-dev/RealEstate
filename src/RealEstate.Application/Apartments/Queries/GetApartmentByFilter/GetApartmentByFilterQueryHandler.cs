@@ -44,7 +44,7 @@ public class GetApartmentByFilterQueryHandler : IRequestHandler<GetApartmentByFi
                 IsSold = a.IsSold
             }).ToAsyncEnumerable()
             .ToListAsync(cancellationToken);
-
+        
         return apartmentDTOs;
 
     }

@@ -27,7 +27,7 @@ public class GetApartmentByIdQueryHandler : IRequestHandler<GetApartmentByIdQuer
 
         if(apartmentDto is null)
         {
-            throw new FileNotFoundException("Apartment with id: {id} not found", request.id.ToString());
+            throw new ItemNotFoundException(request.id);
         }
 
         return apartmentDto;
