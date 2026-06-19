@@ -4,7 +4,7 @@ using RealEstate.Domain;
 
 namespace RealEstate.Application;
 
-public class UpdateApartmentSaleStatusCommandHandler : IRequestHandler<UpdateApartmentSaleStatusCommand, ApartmentEntity?>
+public class UpdateApartmentSaleStatusCommandHandler : IRequestHandler<UpdateApartmentSaleStatusCommand, ApartmentDTO?>
 {
     private  readonly IApartmentRepository _apartmentRepository;
 
@@ -13,7 +13,7 @@ public class UpdateApartmentSaleStatusCommandHandler : IRequestHandler<UpdateApa
         _apartmentRepository = apartmentRepository;
     }
 
-    public async Task<ApartmentEntity?> Handle(UpdateApartmentSaleStatusCommand request, CancellationToken cancellationToken)
+    public async Task<ApartmentDTO?> Handle(UpdateApartmentSaleStatusCommand request, CancellationToken cancellationToken)
     {
         var apartment = await _apartmentRepository.UpdateSaleStatus(request.id, request.status, cancellationToken);
         await _apartmentRepository.SaveChangesAsync(cancellationToken);

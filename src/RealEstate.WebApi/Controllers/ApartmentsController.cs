@@ -18,6 +18,8 @@ namespace RealEstate.WebApi
             _mediator = mediator;
         }
 
+
+        
         [HttpPost("add")]
         public async Task<ActionResult<int>> CreateApartment(CreateApartmentCommand command, CancellationToken cancellationToken)
         {
@@ -27,7 +29,7 @@ namespace RealEstate.WebApi
         }
 
         [HttpGet("getall")]
-        public async Task<ActionResult<IReadOnlyList<ApartmentEntity>>> GetAllApartments(CancellationToken cancellationToken)
+        public async Task<ActionResult<IReadOnlyList<ApartmentDTO>>> GetAllApartments(CancellationToken cancellationToken)
         {
             var apartments = await _mediator.Send(new GetAllApartmentsQuery(), cancellationToken);
 
@@ -70,14 +72,14 @@ namespace RealEstate.WebApi
         }
 
         [HttpPut("updateprice/{id}")]
-        public async Task<ActionResult<ApartmentEntity?>> UpdateApartmentPrice(int id,[FromQuery] decimal price, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApartmentDTO?>> UpdateApartmentPrice(int id,[FromQuery] decimal price, CancellationToken cancellationToken)
         {
             var apartment = await _mediator.Send(new UpdateApartmentPriceCommand(id,price), cancellationToken);
             return apartment;
         }
 
         [HttpPut("updatesalestatus/{id}")]
-        public async Task<ActionResult<ApartmentEntity?>> UpdateApartmentSaleStatus(int id,[FromQuery] bool status, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApartmentDTO?>> UpdateApartmentSaleStatus(int id,[FromQuery] bool status, CancellationToken cancellationToken)
         {
             var apartment = await _mediator.Send(new UpdateApartmentSaleStatusCommand(id, status), cancellationToken);
             return apartment;

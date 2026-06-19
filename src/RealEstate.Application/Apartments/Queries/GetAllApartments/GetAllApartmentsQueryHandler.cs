@@ -4,7 +4,7 @@ using RealEstate.Domain;
 
 namespace RealEstate.Application;
 
-public class GetAllApartmentsQueryHandler : IRequestHandler<GetAllApartmentsQuery, IReadOnlyList<ApartmentEntity>>
+public class GetAllApartmentsQueryHandler : IRequestHandler<GetAllApartmentsQuery, IReadOnlyList<ApartmentDTO>>
 {
     private readonly IApartmentRepository _apartmentRepository;
 
@@ -13,7 +13,7 @@ public class GetAllApartmentsQueryHandler : IRequestHandler<GetAllApartmentsQuer
         _apartmentRepository = apartmentRepository;
     }
 
-    public async Task<IReadOnlyList<ApartmentEntity>> Handle(GetAllApartmentsQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<ApartmentDTO>> Handle(GetAllApartmentsQuery request, CancellationToken cancellationToken)
     {
        return await _apartmentRepository.GetAllAsync(cancellationToken);
     }

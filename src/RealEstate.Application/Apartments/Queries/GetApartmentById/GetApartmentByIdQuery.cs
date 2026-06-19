@@ -4,5 +4,5 @@ using RealEstate.Domain;
 
 namespace RealEstate.Application;
 
-public record GetApartmentByIdQuery(int id) : IRequest<ApartmentEntity?>;
+public record GetApartmentByIdQuery(int id) : IRequest<ApartmentDTO?>;
 

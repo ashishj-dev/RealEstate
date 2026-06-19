@@ -33,19 +33,37 @@ public class ApartmentRepository : IApartmentRepository
     }
 
     //Get All Apartments 
-    public async Task<IReadOnlyList<ApartmentEntity>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<ApartmentDTO>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await _context.Apartments.AsNoTracking().ToListAsync(cancellationToken);
+        return await _context.Apartments.AsNoTracking()
+        .Select(a => new ApartmentDTO
+        {
+            UnitNumber = a.UnitNumber,
+            Floor = a.Floor,
+            Type = a.Type,
+            Direction = a.Direction,
+            IsSold = a.IsSold
+        })
+        .ToListAsync(cancellationToken);
     }
 
     // Get Apartment by Id
-    public async Task<ApartmentEntity?> GetByIdAsync(int id, CancellationToken cancellationToken)
+    public async Task<ApartmentDTO?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+        //return await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+        return await _context.Apartments.Where(a => a.Id == id)
+        .Select(p => new ApartmentDTO
+        {
+            UnitNumber = p.UnitNumber,
+            Floor = p.Floor,
+            Type = p.Type,
+            Direction = p.Direction,
+            IsSold = p.IsSold
+        }).FirstOrDefaultAsync(cancellationToken);
     }
 
     //Get Apartment by Filter
-    public Task<List<ApartmentEntity>> GetFilteredAsync(ApartmentType? type, int? floor, FacingDirection? direction, CancellationToken cancellationToken)
+    public Task<List<ApartmentDTO>> GetFilteredAsync(ApartmentType? type, int? floor, FacingDirection? direction, CancellationToken cancellationToken)
     {
         var query = _context.Apartments.AsQueryable();
 
@@ -64,7 +82,15 @@ public class ApartmentRepository : IApartmentRepository
             query = query.Where(a => a.Floor == floor.Value);
         }
 
-        return query.ToListAsync(cancellationToken);
+        return query.Select(a => new ApartmentDTO
+        {
+            UnitNumber = a.UnitNumber,
+            Floor = a.Floor,
+            Type = a.Type,
+            Direction = a.Direction,
+            IsSold = a.IsSold
+        })
+        .ToListAsync(cancellationToken);
     }
 
     // Save changes to database
@@ -73,30 +99,53 @@ public class ApartmentRepository : IApartmentRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<ApartmentEntity?> UpdatePrice(int id, decimal price, CancellationToken cancellationToken)
+    public async Task<ApartmentDTO?> UpdatePrice(int id, decimal price, CancellationToken cancellationToken)
     {
         var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id);
+        
 
         if(apartment is not null)
         {
             apartment.UpdatePrice(price);
-            return apartment;
+
+            var apartmentDto = new ApartmentDTO
+            {
+                UnitNumber = apartment.UnitNumber,
+                Floor = apartment.Floor,
+                Type = apartment.Type,
+                Direction = apartment.Direction,
+                Price = apartment.Price,
+                IsSold = apartment.IsSold
+            };
+            
+            return apartmentDto;
         }
         
-        return apartment;
+        return null;
 
     }
 
-    public async Task<ApartmentEntity?> UpdateSaleStatus(int id, bool status, CancellationToken cancellationToken)
+    public async Task<ApartmentDTO?> UpdateSaleStatus(int id, bool status, CancellationToken cancellationToken)
     {
         var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id);
 
         if(apartment is not null)
         {
             apartment.UpdateSaleStatus(status);
-            return apartment;
+
+            var apartmentDto = new ApartmentDTO
+            {
+                UnitNumber = apartment.UnitNumber,
+                Floor = apartment.Floor,
+                Type = apartment.Type,
+                Direction = apartment.Direction,
+                Price = apartment.Price,
+                IsSold = apartment.IsSold
+            };
+            
+            return apartmentDto;
         }
         
-        return apartment;
+        return null;
     }
 }

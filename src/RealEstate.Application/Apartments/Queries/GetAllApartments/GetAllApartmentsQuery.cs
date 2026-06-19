@@ -4,5 +4,5 @@ using RealEstate.Domain;
 
 namespace RealEstate.Application;
 
-public record GetAllApartmentsQuery : IRequest<IReadOnlyList<ApartmentEntity>>;
+public record GetAllApartmentsQuery : IRequest<IReadOnlyList<ApartmentDTO>>;
 
