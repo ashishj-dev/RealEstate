@@ -259,6 +259,90 @@ public class QueriesTests
     }
 
 
+    [Fact]
+    public async Task GetAllApartments_WithFilledDb_ReturnsAllApartments()
+    {
+        //Arrange
+
+        //set up return apartment var
+       
+
+        var apartments = new List<ApartmentEntity>
+        {
+            new ApartmentEntity("101-A", 1, ApartmentType.OneBhk, FacingDirection.North, 200000m)
+            {
+                Id = 1
+            },
+
+            new ApartmentEntity("201-A", 2, ApartmentType.TwoBhk, FacingDirection.North, 200000m)
+            {
+                Id = 2
+            },
+
+            new ApartmentEntity("102-A", 1, ApartmentType.OneBhk, FacingDirection.East, 200000m)
+            {
+                Id = 3
+            },
+
+            new ApartmentEntity("202-A", 2, ApartmentType.TwoBhk, FacingDirection.East, 200000m)
+            {
+                Id = 4
+            },
+
+            new ApartmentEntity("301-A", 3, ApartmentType.Penthouse, FacingDirection.North, 200000m)
+            {
+                Id = 5
+            },
+
+        };
+
+        //mock realestatedbcontext
+        var mockDbContext = new Mock<IRealEstateDbContext>();
+        mockDbContext.Setup(x => x.Apartments).Returns(apartments.AsQueryable());
+
+        //setup query and handler
+        var query = new GetAllApartmentsQuery(1,20);
+        var handler = new GetAllApartmentsQueryHandler(mockDbContext.Object);
+
+        //Act
+        //put result of function into variable
+        var result = await handler.Handle(query, CancellationToken.None);
+
+        //Assert
+        //check the variable to match with return apartment var
+        Assert.NotNull(result);
+        Assert.Equal(5, result.Count);
+    }
+
+
+    [Fact]
+    public async Task GetAllApartments_WithEmptyDb_ReturnsNothing()
+    {
+        //Arrange
+
+        //set up empty apartment var
+        var apartments = new List<ApartmentEntity>{};
+
+        //mock realestatedbcontext
+        var mockDbContext = new Mock<IRealEstateDbContext>();
+        mockDbContext.Setup(x => x.Apartments).Returns(apartments.AsQueryable());
+
+        //setup query and handler
+        var query = new GetAllApartmentsQuery(1,20);
+        var handler = new GetAllApartmentsQueryHandler(mockDbContext.Object);
+
+        //Act
+        //put result of function into variable
+        var result = await handler.Handle(query, CancellationToken.None);
+
+        //Assert
+        //check the variable to match with return apartment var
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+
+
 
 
 }
