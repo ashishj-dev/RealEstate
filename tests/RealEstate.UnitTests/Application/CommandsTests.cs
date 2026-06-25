@@ -158,5 +158,64 @@ public class CommandsTests
 
     }
 
+    //Update Sale Status Tests
+    [Theory]
+    [InlineData(1, true)]
+    public async Task UpdateSaleStatus_WhenIsNotSold_ReturnsId(int idToUpdate, bool saleStatus)
+    {
+        var dummyApartment = new ApartmentEntity("101-A", 1, ApartmentType.OneBhk, FacingDirection.North, 200000m)
+        {
+            Id = idToUpdate
+        };
+
+        var command = new UpdateApartmentSaleStatusCommand(idToUpdate, saleStatus);
+        var handler = new UpdateApartmentSaleStatusCommandHandler(_arpartmentRepositoryMock.Object);
+
+        //setup mock functions
+        _arpartmentRepositoryMock.Setup(repo => repo.GetById(idToUpdate, It.IsAny<CancellationToken>())).ReturnsAsync(dummyApartment);
+        _arpartmentRepositoryMock.Setup(repo => repo.UpdateSaleStatus(idToUpdate, saleStatus, It.IsAny<CancellationToken>())).ReturnsAsync(idToUpdate);
+        _arpartmentRepositoryMock.Setup(repo => repo.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
+        // call handler and save result
+
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        Assert.Equal(idToUpdate, result);
+
+        _arpartmentRepositoryMock.Verify(repo =>repo.UpdateSaleStatus(idToUpdate, saleStatus, It.IsAny<CancellationToken>()),Times.Once);
+        _arpartmentRepositoryMock.Verify(repo =>repo.SaveChangesAsync(It.IsAny<CancellationToken>()),Times.Once);
+
+    }
+
+    [Theory]
+    [InlineData(1, false)]
+    public async Task UpdateSaleStatus_WhenIsSold_ReturnsId(int idToUpdate, bool saleStatus)
+    {
+        var dummyApartment = new ApartmentEntity("101-A", 1, ApartmentType.OneBhk, FacingDirection.North, 200000m)
+        {
+            Id = idToUpdate,
+            IsSold = true
+        };
+
+        var command = new UpdateApartmentSaleStatusCommand(idToUpdate, saleStatus);
+        var handler = new UpdateApartmentSaleStatusCommandHandler(_arpartmentRepositoryMock.Object);
+
+        //setup mock functions
+        _arpartmentRepositoryMock.Setup(repo => repo.GetById(idToUpdate, It.IsAny<CancellationToken>())).ReturnsAsync(dummyApartment);
+        _arpartmentRepositoryMock.Setup(repo => repo.UpdateSaleStatus(idToUpdate, saleStatus, It.IsAny<CancellationToken>())).ReturnsAsync(idToUpdate);
+        _arpartmentRepositoryMock.Setup(repo => repo.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
+        // call handler and save result
+
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        Assert.Equal(idToUpdate, result);
+
+        _arpartmentRepositoryMock.Verify(repo =>repo.UpdateSaleStatus(idToUpdate, saleStatus, It.IsAny<CancellationToken>()),Times.Once);
+        _arpartmentRepositoryMock.Verify(repo =>repo.SaveChangesAsync(It.IsAny<CancellationToken>()),Times.Once);
+
+    }
+
+
 
 }
