@@ -1,14 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.3.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.17" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="Mockable.Moq" Version="1.0.0" />
     <PackageReference Include="Moq" Version="4.20.72" />
@@ -24,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\RealEstate.Domain\RealEstate.Domain.csproj" />
     <ProjectReference Include="..\..\src\RealEstate.Application\RealEstate.Application.csproj" />
+    <ProjectReference Include="..\..\src\RealEstate.WebApi\RealEstate.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
